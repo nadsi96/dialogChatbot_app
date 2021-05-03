@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/m_del_record"
+        android:title="기록 지우기"
+        android:icon="@drawable/eraser"
+        />
+    <item
+        android:id="@+id/m_setting"
+        android:title="설정"
+        android:icon="@drawable/settings"
+        />
+    <item
+        android:id="@+id/m_exit"
+        android:title="종료"
+        android:icon="@drawable/exit"
+        />
+
+</menu>

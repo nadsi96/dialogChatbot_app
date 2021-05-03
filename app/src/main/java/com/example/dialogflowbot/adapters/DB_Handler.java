@@ -1,4 +1,4 @@
-package com.example.dialogflowbot;
+package com.example.dialogflowbot.adapters;
 
 import android.content.Context;
 import android.database.Cursor;

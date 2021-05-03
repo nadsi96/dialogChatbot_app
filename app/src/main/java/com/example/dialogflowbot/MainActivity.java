@@ -2,15 +2,24 @@ package com.example.dialogflowbot;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.dialogflowbot.adapters.ChatAdapter;
+import com.example.dialogflowbot.adapters.DB_Handler;
 import com.example.dialogflowbot.helpers.SendMessageInBg;
 import com.example.dialogflowbot.interfaces.BotReply;
+import com.example.dialogflowbot.menu.Option_Menu;
+import com.example.dialogflowbot.menu.YesorNoAlert;
 import com.example.dialogflowbot.models.Message;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
   private String TAG = "mainactivity";
 
   private DB_Handler db_handler;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -141,5 +151,33 @@ public class MainActivity extends AppCompatActivity implements BotReply {
       Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
     }
 
+  }
+
+  public boolean onCreateOptionsMenu(Menu menu){
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.option_menu, menu);
+    Option_Menu option_menu = new Option_Menu(this);
+    return true;
+  }
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    switch(item.getItemId()){
+      case R.id.m_del_record:
+        //채팅 기록 삭제
+        YesorNoAlert alert_delete_record = new YesorNoAlert(MainActivity.this, "Delete Chat Record", "Are you sure to delete?");
+
+        Toast.makeText(MainActivity.this, "delete record", Toast.LENGTH_SHORT).show();
+        break;
+      case R.id.m_setting:
+        //설정화면
+        Toast.makeText(MainActivity.this, "show settings", Toast.LENGTH_SHORT).show();
+        break;
+      case R.id.m_exit:
+        //앱 종료
+        YesorNoAlert alert_exit = new YesorNoAlert(MainActivity.this, "Exit", "Are you sure to exit?");
+        Toast.makeText(MainActivity.this, "exit", Toast.LENGTH_SHORT).show();
+        break;
+    }
+    return super.onOptionsItemSelected(item);
   }
 }
