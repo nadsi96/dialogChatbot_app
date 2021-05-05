@@ -83,6 +83,84 @@
         android:layout_margin="5dp"
         android:layout_alignParentRight="true"
       />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/open_menu"
+        android:orientation="vertical"
+        android:layout_below="@+id/img_menu"
+        android:layout_alignRight="@+id/img_menu"
+        >
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/menu"
+          android:orientation="vertical"
+          android:background="@drawable/borderline"
+          >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/menu_setting"
+            android:background="@drawable/borderline"
+            android:padding="@dimen/menuPadding"
+            >
+          <ImageView
+              android:layout_width="@dimen/menuImgSize"
+              android:layout_height="@dimen/menuImgSize"
+              android:src="@drawable/settings"
+              android:layout_marginRight="@dimen/menuImgMargin"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="설정"
+              android:textSize="@dimen/menuTxtSize"
+              />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/menu_erase"
+            android:background="@drawable/borderline"
+            android:padding="@dimen/menuPadding"
+            >
+          <ImageView
+              android:layout_width="@dimen/menuImgSize"
+              android:layout_height="@dimen/menuImgSize"
+              android:src="@drawable/eraser"
+              android:layout_marginRight="@dimen/menuImgMargin"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="채팅 기록 지우기"
+              android:textSize="@dimen/menuTxtSize"
+              />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/menu_exit"
+            android:background="@drawable/borderline"
+            android:padding="@dimen/menuPadding"
+            >
+          <ImageView
+              android:layout_width="@dimen/menuImgSize"
+              android:layout_height="@dimen/menuImgSize"
+              android:src="@drawable/exit"
+              android:layout_marginRight="@dimen/menuImgMargin"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="종료"
+              android:textSize="@dimen/menuTxtSize"
+              />
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
+
   </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

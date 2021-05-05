@@ -34,7 +34,10 @@ public class DB_Handler {
     {
 //        createDatabase(context);
         database = context.openOrCreateDatabase(DB_dialogflow_chatbot, Context.MODE_PRIVATE, null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_RECORDS + "(" + COLUMN_RECORDED_TIME + " text, "+ COLUMN_MESSAGE + "text, " + COLUMN_IS_RECEIVED + " text)");
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_RECORDS + "(" +
+                COLUMN_RECORDED_TIME + " text, "+
+                COLUMN_MESSAGE + " text, " +
+                COLUMN_IS_RECEIVED + " text)");
     }
 
     //db 생성
@@ -63,10 +66,13 @@ public class DB_Handler {
 
     public void insert_Chat(Message message){
 
-        database.execSQL("INSERT INTO " + TABLE_CHAT_RECORDS + " ("+COLUMN_RECORDED_TIME +", " +COLUMN_MESSAGE +", "+COLUMN_IS_RECEIVED +")"
-                + "VALUES('" +message.getDatetime()+"', '" +message.getMessage()+"', '" +message.getIsReceived_flag()+"')");
+        database.execSQL("INSERT INTO " + TABLE_CHAT_RECORDS + " ("+COLUMN_RECORDED_TIME +", " +COLUMN_MESSAGE +", "+COLUMN_IS_RECEIVED +")" +
+                "VALUES('" +message.getDatetime()+"', '" +message.getMessage()+"', '" +message.getIsReceived_flag()+"')");
 
     }
 
-
+    public void delete_Chat_Record(){
+        String sql = "Delete from " + TABLE_CHAT_RECORDS;
+        database.execSQL(sql);
+    }
 }

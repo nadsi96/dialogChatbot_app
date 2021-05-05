@@ -2,24 +2,20 @@ package com.example.dialogflowbot;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.dialogflowbot.adapters.ChatAdapter;
 import com.example.dialogflowbot.adapters.DB_Handler;
 import com.example.dialogflowbot.helpers.SendMessageInBg;
 import com.example.dialogflowbot.interfaces.BotReply;
-import com.example.dialogflowbot.menu.Option_Menu;
-import com.example.dialogflowbot.menu.YesorNoAlert;
+import com.example.dialogflowbot.adapters.MenuAdapter;
 import com.example.dialogflowbot.models.Message;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -45,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements BotReply {
   EditText editMessage;
   ImageButton btnSend;
 
+  private ImageView img_menu;
+  LinearLayout menu;
+  private LinearLayout menu_setting, menu_erase, menu_exit;
+
   //dialogFlow
   private SessionsClient sessionsClient;
   private SessionName sessionName;
@@ -64,8 +64,23 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     chatAdapter = new ChatAdapter(messageList, this);
     chatView.setAdapter(chatAdapter);
 
+    img_menu = findViewById(R.id.img_menu);
+    menu = findViewById(R.id.menu);
+    menu.setVisibility(View.GONE);
+    menu_setting = findViewById(R.id.menu_setting);
+    menu_erase = findViewById(R.id.menu_erase);
+    menu_exit = findViewById(R.id.menu_exit);
+
     db_handler = DB_Handler.getInstance(this);
 
+    setUpBot();
+    set_Recorded_Chat();
+
+    setButtons();
+
+  }
+
+  private void setButtons(){
     btnSend.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         String message = editMessage.getText().toString();
@@ -81,16 +96,18 @@ public class MainActivity extends AppCompatActivity implements BotReply {
           //                              현재 설정된 adapter(설정된 것이 없다면 null) 반환
           Objects.requireNonNull(chatView.getAdapter()).notifyDataSetChanged();
           Objects.requireNonNull(chatView.getLayoutManager())
-              .scrollToPosition(messageList.size() - 1);
+                  .scrollToPosition(messageList.size() - 1);
         } else {
           Toast.makeText(MainActivity.this, "Please enter text!", Toast.LENGTH_SHORT).show();
         }
       }
     });
 
-    setUpBot();
-    set_Recorded_Chat();
-
+    MenuAdapter menuAdapter = new MenuAdapter(MainActivity.this, this, this.menu);
+    img_menu.setOnClickListener(menuAdapter);
+    menu_setting.setOnClickListener(menuAdapter);
+    menu_erase.setOnClickListener(menuAdapter);
+    menu_exit.setOnClickListener(menuAdapter);
   }
 
   private void setUpBot() {
@@ -153,31 +170,9 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
   }
 
-  public boolean onCreateOptionsMenu(Menu menu){
-    MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.option_menu, menu);
-    Option_Menu option_menu = new Option_Menu(this);
-    return true;
-  }
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    switch(item.getItemId()){
-      case R.id.m_del_record:
-        //채팅 기록 삭제
-        YesorNoAlert alert_delete_record = new YesorNoAlert(MainActivity.this, "Delete Chat Record", "Are you sure to delete?");
-
-        Toast.makeText(MainActivity.this, "delete record", Toast.LENGTH_SHORT).show();
-        break;
-      case R.id.m_setting:
-        //설정화면
-        Toast.makeText(MainActivity.this, "show settings", Toast.LENGTH_SHORT).show();
-        break;
-      case R.id.m_exit:
-        //앱 종료
-        YesorNoAlert alert_exit = new YesorNoAlert(MainActivity.this, "Exit", "Are you sure to exit?");
-        Toast.makeText(MainActivity.this, "exit", Toast.LENGTH_SHORT).show();
-        break;
-    }
-    return super.onOptionsItemSelected(item);
+  public void setEmptyMessageList(){
+    messageList = new ArrayList<>();
+    chatAdapter.notifyDataSetChanged();
+    Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
   }
 }

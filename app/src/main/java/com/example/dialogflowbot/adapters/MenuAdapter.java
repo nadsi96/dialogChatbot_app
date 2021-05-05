@@ -1,24 +1,28 @@
-package com.example.dialogflowbot.menu;
+package com.example.dialogflowbot.adapters;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.app.Activity;
 import android.widget.Toast;
 
+import com.example.dialogflowbot.MainActivity;
 import com.example.dialogflowbot.R;
-
-import io.grpc.netty.shaded.io.netty.util.internal.logging.Log4J2LoggerFactory;
+import com.example.dialogflowbot.menu_operations.YesorNoAlert;
+import com.example.dialogflowbot.menu_operations.eraseYes;
+import com.example.dialogflowbot.menu_operations.exitYes;
 
 public class MenuAdapter implements View.OnClickListener{
 
     Context context = null;
+    MainActivity _main;
     LinearLayout menu;
 
-    public MenuAdapter(Context context, LinearLayout menu) {
+    public MenuAdapter(Context context, MainActivity _main,  LinearLayout menu) {
         this.context = context;
+        this._main = _main;
         this.menu = menu;
+
     }
 
     public void onClick(View view){
@@ -62,7 +66,7 @@ public class MenuAdapter implements View.OnClickListener{
         @Override
         public void onClick(View view) {
             //채팅 기록 삭제
-            YesorNoAlert alert_delete_record = new YesorNoAlert(context, "Delete Chat Record", "Are you sure to delete?");
+            YesorNoAlert alert_delete_record = new YesorNoAlert(context, "Delete Chat Record", "Are you sure to delete?", new eraseYes(context, _main));
             alert_delete_record.create();
         }
     };
@@ -71,7 +75,7 @@ public class MenuAdapter implements View.OnClickListener{
         @Override
         public void onClick(View view) {
             //앱 종료
-            YesorNoAlert alert_exit = new YesorNoAlert(context, "Exit", "Are you sure to exit?");
+            YesorNoAlert alert_exit = new YesorNoAlert(context, "Exit", "Are you sure to exit?", new exitYes(context));
             Toast.makeText(context, "exit", Toast.LENGTH_SHORT).show();
         }
     };

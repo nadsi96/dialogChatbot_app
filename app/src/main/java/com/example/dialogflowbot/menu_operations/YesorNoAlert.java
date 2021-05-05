@@ -1,13 +1,11 @@
-package com.example.dialogflowbot.menu;
+package com.example.dialogflowbot.menu_operations;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.dialogflowbot.R;
+import com.example.dialogflowbot.interfaces.YesClicked;
 
 public class YesorNoAlert extends AlertDialog {
 
@@ -16,15 +14,18 @@ public class YesorNoAlert extends AlertDialog {
     AlertDialog.Builder builder;
     private String title;
     private String content;
+    YesClicked yesClicked;
 
-    public YesorNoAlert(Context context, String title, String content) {
+    public YesorNoAlert(Context context, String title, String content, YesClicked yesClicked) {
         super(context);
         this.context = context;
         this.title = title;
         this.content = content;
+        this.yesClicked = yesClicked;
         this.builder = new AlertDialog.Builder(context);
         setBuilder();
     }
+
 
     private void setBuilder(){
         this.builder.setMessage(this.content);
@@ -39,6 +40,7 @@ public class YesorNoAlert extends AlertDialog {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 Toast.makeText(context, "yes Clicked", Toast.LENGTH_SHORT).show();
+                yesClicked.yesClicked();
             }
         });
     }

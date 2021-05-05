@@ -12,6 +12,8 @@ public class Message {
   private String message;
   private boolean isReceived;
   private String datetime;
+  private String hour;
+  private String minute;
 
   public Message(String message, boolean isReceived) {
     this.message = message;
@@ -27,11 +29,13 @@ public class Message {
     String time = dateFormat.format(date_now);
     this.datetime = time;
     Log.i("time", time);
+    setTime();
   }
   public Message(String message, boolean isReceived, String datetime) {
     this.message = message;
     this.isReceived = isReceived;
     this.datetime = datetime;
+    setTime();
   }
 
   public String getMessage() {
@@ -53,15 +57,27 @@ public class Message {
   public String getDatetime(){
     return this.datetime;
   }
+
+  public String getHour(){
+    return this.hour;
+  }
+  public String getMinute(){
+    return this.minute;
+  }
+
   public int getIsReceived_flag(){
     if (isReceived)
       return 1;
     else
       return 0;
   }
+
+  private void setTime(){
+    this.hour = this.datetime.substring(8, 10);
+    this.minute = this.datetime.substring(10, 12);
+  }
+
   public String getTime(){
-    String hour = this.datetime.substring(8, 10) + "시";
-    String min = this.datetime.substring(10, 12) + "분";
-    return hour+min;
+    return hour+ "시 " + minute + "분";
   }
 }
