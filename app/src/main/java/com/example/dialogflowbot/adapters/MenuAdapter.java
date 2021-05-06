@@ -26,7 +26,6 @@ public class MenuAdapter implements View.OnClickListener{
     }
 
     public void onClick(View view){
-        Log.i("clicked", ""+view.getId());
         switch (view.getId()){
             case R.id.img_menu:
                 menuClicked.onClick(view);
@@ -47,7 +46,6 @@ public class MenuAdapter implements View.OnClickListener{
     private View.OnClickListener menuClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i("menu", "clicked");
             if(menu.getVisibility() == View.GONE)
                 menu.setVisibility(View.VISIBLE);
             else
@@ -76,7 +74,8 @@ public class MenuAdapter implements View.OnClickListener{
         public void onClick(View view) {
             //앱 종료
             YesorNoAlert alert_exit = new YesorNoAlert(context, "Exit", "Are you sure to exit?", new exitYes(context));
-            Toast.makeText(context, "exit", Toast.LENGTH_SHORT).show();
+            alert_exit.create();
+//            Toast.makeText(context, "exit", Toast.LENGTH_SHORT).show();
         }
     };
 }

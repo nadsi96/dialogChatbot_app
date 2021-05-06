@@ -78,6 +78,12 @@ public class Message {
   }
 
   public String getTime(){
-    return hour+ "시 " + minute + "분";
+    return hour+ " : " + minute;
+  }
+  public String getDate(){
+    String year = this.datetime.substring(0, 4) + "년 ";
+    String month = this.datetime.substring(4, 6) + "월 ";
+    String day = this.datetime.substring(6, 8) + "일";
+    return year + month + day;
   }
 }

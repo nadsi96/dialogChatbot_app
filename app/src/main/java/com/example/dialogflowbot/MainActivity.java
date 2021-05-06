@@ -1,8 +1,13 @@
 package com.example.dialogflowbot;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements BotReply {
   LinearLayout menu;
   private LinearLayout menu_setting, menu_erase, menu_exit;
 
+  private int[] menuXY = new int[2];
+  private int[] tomenuXY;
+
   //dialogFlow
   private SessionsClient sessionsClient;
   private SessionName sessionName;
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Log.i("onCreate", "start");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     chatView = findViewById(R.id.chatView);
@@ -66,18 +75,47 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
     img_menu = findViewById(R.id.img_menu);
     menu = findViewById(R.id.menu);
-    menu.setVisibility(View.GONE);
+//    menu.setVisibility(View.GONE);
+
     menu_setting = findViewById(R.id.menu_setting);
     menu_erase = findViewById(R.id.menu_erase);
     menu_exit = findViewById(R.id.menu_exit);
 
     db_handler = DB_Handler.getInstance(this);
 
+    findViewById(R.id.img_chatBackground).setAlpha(0.5f);
     setUpBot();
     set_Recorded_Chat();
 
     setButtons();
+    Log.i("onCreate", "end");
+  }
 
+//  @Override
+//  protected void onStart() {
+//    super.onStart();
+//    menu.getLocationOnScreen(menuXY);
+//    tomenuXY = new int[]{menuXY[0] + menu.getWidth(), menuXY[1] + menu.getHeight()};
+//    menu.setVisibility(View.GONE);
+//    Log.i("XXX", ""+(menuXY[0]));
+//    Log.i("to", ""+(tomenuXY[0]));
+//    Log.i("YYY", ""+(menuXY[1]));
+//    Log.i("to", ""+(tomenuXY[1]));
+//  }
+
+  @Override
+  protected void onResume() {
+    Log.i("onResume", "start");
+    super.onResume();
+//    menu.setVisibility(View.VISIBLE);
+//    menu.getLocationOnScreen(menuXY);
+//    tomenuXY = new int[]{menuXY[0] + menu.getWidth(), menuXY[1] + menu.getHeight()};
+    menu.setVisibility(View.GONE);
+//    Log.i("XXX", ""+(menuXY[0]));
+//    Log.i("to", ""+(tomenuXY[0]));
+//    Log.i("YYY", ""+(menuXY[1]));
+//    Log.i("to", ""+(tomenuXY[1]));
+    Log.i("onResume", "end");
   }
 
   private void setButtons(){
@@ -102,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         }
       }
     });
+
 
     MenuAdapter menuAdapter = new MenuAdapter(MainActivity.this, this, this.menu);
     img_menu.setOnClickListener(menuAdapter);
@@ -147,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
          db_handler.insert_Chat(messageList.get(messageList.size()-1));
          Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
        }else {
-         Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
+         Toast.makeText(this, "something wrong", Toast.LENGTH_SHORT).show();
        }
      } else {
        Toast.makeText(this, "failed to connect!", Toast.LENGTH_SHORT).show();
@@ -170,9 +209,62 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
   }
 
-  public void setEmptyMessageList(){
-    messageList = new ArrayList<>();
-    chatAdapter.notifyDataSetChanged();
-    Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+  // 다른 영역 클릭시 숨김
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev) {
+    View view = getCurrentFocus();
+
+    float x = ev.getX();
+    float y = ev.getY();
+    int scrcoords[] = new int[2];
+
+    menu.getLocationOnScreen(menuXY);
+    tomenuXY = new int[]{menuXY[0] + menu.getWidth(), menuXY[1] + menu.getHeight()};
+
+    if (view != null){
+
+    }
+    // 키보드 숨김
+    if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+//    if ((ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+      view.getLocationOnScreen(scrcoords);
+      float keyX = ev.getRawX() + view.getLeft() - scrcoords[0];
+      float keyY = ev.getRawY() + view.getTop() - scrcoords[1];
+      // btnSend가 눌렸다면 키보드 유지
+      if (keyX > btnSend.getLeft() && keyX < btnSend.getRight() && keyY > btnSend.getTop() && keyY < btnSend.getBottom()){
+        return btnSend.callOnClick();
+      }
+      if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+        ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+    }
+
+//    Log.i("X", ""+x);
+//    Log.i("Y", ""+y);
+//    Log.i("menu X", ""+menu.getX());
+//    Log.i("menu X", ""+(menu.getX() + menu.getWidth()));
+//    Log.i("menu Y", ""+(menu.getY()));
+//    Log.i("menu Y", ""+(menu.getY() + menu.getHeight()));
+//    Log.i("XXX", ""+(menuXY[0]));
+//    Log.i("to", ""+(tomenuXY[0]));
+//    Log.i("YYY", ""+(menuXY[1]));
+//    Log.i("to", ""+(tomenuXY[1]));
+
+    // 메뉴가 열려있을 때 다른 곳 누르면 숨김
+    if (menu.getVisibility() == View.VISIBLE &&  (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE)){
+      // 메뉴 버튼을 눌렀는지 확인
+      if (!(x > img_menu.getLeft() && x < img_menu.getRight() && y > img_menu.getTop() && y < img_menu.getBottom())){
+        // 메뉴버튼이 눌리지 않았다면 메뉴창의 내용이 눌린것인지 확인
+        if (!(x > menuXY[0] && x < tomenuXY[0] && y > menuXY[1] && y < tomenuXY[1])){
+          // 메뉴창의 공간에도 눌린 것이 없다면 메뉴 닫음
+          return img_menu.callOnClick();
+        }
+      }
+    }
+    return super.dispatchTouchEvent(ev);
+  }
+
+  public void clearMessageList(){
+    chatAdapter.clear();
+    Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size());
   }
 }

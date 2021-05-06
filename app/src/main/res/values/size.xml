@@ -4,4 +4,5 @@
     <dimen name="menuImgSize">30dp</dimen>
     <dimen name="menuImgMargin">10dp</dimen>
     <dimen name="menuTxtSize">22sp</dimen>
+    <dimen name="msgTimeTxtSize">14sp</dimen>
 </resources>

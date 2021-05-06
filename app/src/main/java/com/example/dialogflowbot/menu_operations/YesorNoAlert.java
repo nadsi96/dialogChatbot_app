@@ -40,7 +40,7 @@ public class YesorNoAlert extends AlertDialog {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 Toast.makeText(context, "yes Clicked", Toast.LENGTH_SHORT).show();
-                yesClicked.yesClicked();
+                yesClicked.yesClick();
             }
         });
     }

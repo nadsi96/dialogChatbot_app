@@ -18,9 +18,9 @@ public class eraseYes implements YesClicked {
         db_handler = DB_Handler.getInstance(context);
     }
     @Override
-    public void yesClicked() {
+    public void yesClick() {
         db_handler.delete_Chat_Record();
         Toast.makeText(this.context, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
-        _main.setEmptyMessageList();
+        _main.clearMessageList();
     }
 }

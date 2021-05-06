@@ -1,0 +1,10 @@
+Icon made by Freepik from www.flation.com
+	send
+	setting
+Icon made by pongsakornRed from www.flation.com
+	eraser
+Icon made by Pixel perfect from www.flation.com
+	exit (modified from Logout)
+	menu
+from class
+	ptu
