@@ -1,0 +1,48 @@
+[33mcommit 68029f8c89e526e01972ab6400a5d0786cecf291[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Tue May 11 15:43:09 2021 +0900
+
+    remove ignored file(credential.json)
+    git push -u origin master
+
+[33mcommit 9e617c94fea1ce5fe996553f7fca6d26768fa469[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Thu May 6 21:40:12 2021 +0900
+
+    close when touch out of keyboard or menu and add dateline if chat record's date is not same with previous
+
+[33mcommit 9389ba9f8aef7cb22b5f200dd4a7526a984af183[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Wed May 5 10:38:59 2021 +0900
+
+    menu added, create table modified, need to check exit on menu
+
+[33mcommit 42aedb597d1b5bf548fb1f41844fbe269dd3202e[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Wed May 5 02:41:36 2021 +0900
+
+    menu added, create table modified, need to check exit on menu
+
+[33mcommit 372258e2da5c5a7e0b6dc81fabb66eec87688bb9[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Mon May 3 09:33:52 2021 +0900
+
+    try to make option_menu
+
+[33mcommit 4c631b720ac6dabe15081d6b2ffc478c72df01b6[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Sun Apr 18 12:38:13 2021 +0900
+
+    add ignore file config
+
+[33mcommit d8d60b7a3dc564e1f4bed6e07062ef6cff7b6dfa[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Sun Apr 18 12:32:23 2021 +0900
+
+    remove credential
+
+[33mcommit 02515e86dc96b8b0378d5d08478e36c2e3c8080f[m
+Author: nadsi96 <nadsi96@naver.com>
+Date:   Sat Apr 17 23:28:05 2021 +0900
+
+    upload_test
