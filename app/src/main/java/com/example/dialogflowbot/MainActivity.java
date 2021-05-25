@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,10 +20,13 @@ import com.example.dialogflowbot.helpers.SendMessageInBg;
 import com.example.dialogflowbot.interfaces.BotReply;
 import com.example.dialogflowbot.adapters.MenuAdapter;
 import com.example.dialogflowbot.models.Message;
+import com.example.dialogflowbot.rich_response.Card_Response;
+import com.example.dialogflowbot.rich_response.Suggestion_Chips;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2.Intent;
 import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     editMessage = findViewById(R.id.editMessage);
     btnSend = findViewById(R.id.btnSend);
 
-    chatAdapter = new ChatAdapter(messageList, this);
+    chatAdapter = new ChatAdapter(messageList, this, this);
     chatView.setAdapter(chatAdapter);
 
     img_menu = findViewById(R.id.img_menu);
@@ -90,18 +91,6 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     setButtons();
     Log.i("onCreate", "end");
   }
-
-//  @Override
-//  protected void onStart() {
-//    super.onStart();
-//    menu.getLocationOnScreen(menuXY);
-//    tomenuXY = new int[]{menuXY[0] + menu.getWidth(), menuXY[1] + menu.getHeight()};
-//    menu.setVisibility(View.GONE);
-//    Log.i("XXX", ""+(menuXY[0]));
-//    Log.i("to", ""+(tomenuXY[0]));
-//    Log.i("YYY", ""+(menuXY[1]));
-//    Log.i("to", ""+(tomenuXY[1]));
-//  }
 
   @Override
   protected void onResume() {
@@ -154,12 +143,12 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 //      InputStream stream = this.getResources().openRawResource(R.raw.credential);
       InputStream stream = this.getResources().openRawResource(R.raw.credential);
       GoogleCredentials credentials = GoogleCredentials.fromStream(stream)
-          .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
+              .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
       String projectId = ((ServiceAccountCredentials) credentials).getProjectId();
 
       SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
       SessionsSettings sessionsSettings = settingsBuilder.setCredentialsProvider(
-          FixedCredentialsProvider.create(credentials)).build();
+              FixedCredentialsProvider.create(credentials)).build();
       sessionsClient = SessionsClient.create(sessionsSettings);
       sessionName = SessionName.of(projectId, uuid);
 
@@ -169,28 +158,73 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     }
   }
 
-  private void sendMessageToBot(String message) {
+  public void sendMessageToBot(String message) {
     QueryInput input = QueryInput.newBuilder()
-        .setText(TextInput.newBuilder().setText(message).setLanguageCode("en-US")).build();
+            .setText(TextInput.newBuilder().setText(message).setLanguageCode("en-US")).build();
     new SendMessageInBg(this, sessionName, sessionsClient, input).execute();
   }
 
   // chatbot의 답변 추가
   @Override
   public void callback(DetectIntentResponse returnResponse) {
-     if(returnResponse!=null) {
-       String botReply = returnResponse.getQueryResult().getFulfillmentText();
-       if(!botReply.isEmpty()){
-         messageList.add(new Message(botReply, true));
-         chatAdapter.notifyDataSetChanged();
-         db_handler.insert_Chat(messageList.get(messageList.size()-1));
-         Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
-       }else {
-         Toast.makeText(this, "something wrong", Toast.LENGTH_SHORT).show();
-       }
-     } else {
-       Toast.makeText(this, "failed to connect!", Toast.LENGTH_SHORT).show();
-     }
+    Log.i("callback", "hello");
+    Log.i("callback returnResponse", returnResponse.getQueryResult().getFulfillmentText() + "");
+    Log.i("callback getAction", returnResponse.getQueryResult().getAction() + "");
+    Log.i("callback getAllFields", returnResponse.getQueryResult().getAllFields() + "");
+    boolean flag = true;
+
+    if(returnResponse!=null) {
+      String botReply = returnResponse.getQueryResult().getFulfillmentText();
+      Log.i("callback botReply", botReply + "");
+      String action = returnResponse.getQueryResult().getAction();
+
+      if(action.equals("input.test")){
+        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(1).getCard();
+//        Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(2).getQuickReplies();
+//        Log.i("111", replies.getQuickReplies(0));
+//        Log.i("2", replies.getQuickReplies(1));
+        Log.i("card_Button_Count", card.getButtonsCount()+"");
+        String title = card.getTitle();
+        String text = card.getSubtitle();
+        String image = card.getImageUri();
+        String btnText = card.getButtons(0).getText();
+        String btnUrl = card.getButtons(0).getPostback();
+        Log.i("card", btnText);
+        Log.i("card", btnUrl);
+        Log.i("card", title);
+        Log.i("card", text);
+        Log.i("card", image);
+
+        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+        flag = false;
+
+      }else if(action.equals("input.tel")){
+        Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(1).getQuickReplies();
+        String str_lst[] = replies.getQuickRepliesList().toArray(new String[0]);
+        for (int i = 0; i < str_lst.length;i++){
+          Log.i("input.tel", str_lst[i]);
+        }
+        messageList.add(new Message(new Suggestion_Chips(botReply, str_lst)));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+        flag = false;
+      }
+
+      if(!botReply.isEmpty() & flag){
+        messageList.add(new Message(botReply, true));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+      }else {
+        Toast.makeText(this, "something wrong", Toast.LENGTH_SHORT).show();
+      }
+    } else {
+      Toast.makeText(this, "failed to connect!", Toast.LENGTH_SHORT).show();
+    }
   }
 
   // 이전 기록 추가
@@ -238,16 +272,6 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
     }
 
-//    Log.i("X", ""+x);
-//    Log.i("Y", ""+y);
-//    Log.i("menu X", ""+menu.getX());
-//    Log.i("menu X", ""+(menu.getX() + menu.getWidth()));
-//    Log.i("menu Y", ""+(menu.getY()));
-//    Log.i("menu Y", ""+(menu.getY() + menu.getHeight()));
-//    Log.i("XXX", ""+(menuXY[0]));
-//    Log.i("to", ""+(tomenuXY[0]));
-//    Log.i("YYY", ""+(menuXY[1]));
-//    Log.i("to", ""+(tomenuXY[1]));
 
     // 메뉴가 열려있을 때 다른 곳 누르면 숨김
     if (menu.getVisibility() == View.VISIBLE &&  (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE)){

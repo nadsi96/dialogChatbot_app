@@ -2,6 +2,9 @@ package com.example.dialogflowbot.models;
 
 import android.util.Log;
 
+import com.example.dialogflowbot.rich_response.Card_Response;
+import com.example.dialogflowbot.rich_response.Suggestion_Chips;
+
 import java.util.Date;
 import java.util.TimeZone;
 import java.text.DateFormat;
@@ -14,6 +17,8 @@ public class Message {
   private String datetime;
   private String hour;
   private String minute;
+  private Card_Response card_response;
+  private Suggestion_Chips suggestion_chips;
 
   public Message(String message, boolean isReceived) {
     this.message = message;
@@ -38,12 +43,31 @@ public class Message {
     setTime();
   }
 
+  //Card_Response 입력
+  public Message(Card_Response card_response){
+    this((String)null, true);
+    this.card_response = card_response;
+  }
+  public Message(Card_Response card_response, String datetime){
+    this(card_response);
+    this.datetime = datetime;
+  }
+  //Suggestion_Chips 입력
+  public Message(Suggestion_Chips suggestion_chips){
+    this((String) null, true);
+    this.suggestion_chips = suggestion_chips;
+  }
+
   public String getMessage() {
     return message;
   }
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public Card_Response getCard_response(){
+    return this.card_response;
   }
 
   public boolean getIsReceived() {
@@ -72,6 +96,18 @@ public class Message {
       return 0;
   }
 
+  public Suggestion_Chips getSuggestion_chips(){
+    return this.suggestion_chips;
+  }
+  public String getSuggestion_chips_str(){
+    String temp = "";
+    String temp_items[] =getSuggestion_chips().getSuggestions();
+    temp += temp_items[0];
+    for (int i = 1; i < temp_items.length; i++){
+      temp += ","+temp_items[i];
+    }
+    return temp;
+  }
   private void setTime(){
     this.hour = this.datetime.substring(8, 10);
     this.minute = this.datetime.substring(10, 12);
