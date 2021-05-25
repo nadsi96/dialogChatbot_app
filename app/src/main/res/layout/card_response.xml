@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ImageView
+        android:padding="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/img_card_img"
+        android:src="@drawable/eraser"
+        android:scaleType="fitCenter"
+        android:alpha="20"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_chat_receive"
+        android:alpha="10"
+        android:padding="50dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="24sp"
+            android:id="@+id/tv_card_title"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text Text Text Text Text Text Text Text"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/tv_card_text"
+            android:textSize="18sp"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="button"
+            android:id="@+id/btn_card_btn"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            />
+
+
+    </LinearLayout>
+</RelativeLayout>
