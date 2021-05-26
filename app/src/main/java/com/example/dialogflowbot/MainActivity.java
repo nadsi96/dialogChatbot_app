@@ -201,7 +201,49 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
         flag = false;
 
-      }else if(action.equals("input.tel")){
+      }else if(action.equals("input.mil")){
+        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
+        String title = card.getTitle();
+        String text = card.getSubtitle();
+        String image = card.getImageUri();
+        String btnText = card.getButtons(0).getText();
+        String btnUrl = card.getButtons(0).getPostback();
+
+        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+        flag = false;
+
+      }else if(action.equals("input.기숙사")){
+        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
+        String title = card.getTitle();
+        String text = card.getSubtitle();
+        String image = card.getImageUri();
+        String btnText = card.getButtons(0).getText();
+        String btnUrl = card.getButtons(0).getPostback();
+
+        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+        flag = false;
+
+      }else if(action.equals("input.재입학")){
+        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
+        String title = card.getTitle();
+        String text = card.getSubtitle();
+        String image = card.getImageUri();
+        String btnText = card.getButtons(0).getText();
+        String btnUrl = card.getButtons(0).getPostback();
+
+        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
+        chatAdapter.notifyDataSetChanged();
+        db_handler.insert_Chat(messageList.get(messageList.size()-1));
+        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+        flag = false;
+
+      } else if(action.equals("input.tel")){
         Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(1).getQuickReplies();
         String str_lst[] = replies.getQuickRepliesList().toArray(new String[0]);
         for (int i = 0; i < str_lst.length;i++){
