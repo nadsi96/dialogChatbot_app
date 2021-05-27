@@ -26,7 +26,13 @@ public class Card_Response {
     }
     public String getTitle(){ return this.title;}
     public String getText(){ return this.text;}
-    public String getImage(){return this.image;}
+    public int getImage(){
+        try{
+            return Integer.parseInt(this.image);
+        }catch (Exception e){
+            return -1;
+        }
+    }
     public String getBtn_text(){return this.btn_text;}
     public String getBtn_url(){return this.btn_url;}
 }

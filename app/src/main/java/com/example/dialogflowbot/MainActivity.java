@@ -20,6 +20,7 @@ import com.example.dialogflowbot.helpers.SendMessageInBg;
 import com.example.dialogflowbot.interfaces.BotReply;
 import com.example.dialogflowbot.adapters.MenuAdapter;
 import com.example.dialogflowbot.models.Message;
+import com.example.dialogflowbot.models.Settings;
 import com.example.dialogflowbot.rich_response.Card_Response;
 import com.example.dialogflowbot.rich_response.Suggestion_Chips;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -61,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements BotReply {
   private String TAG = "mainactivity";
 
   private DB_Handler db_handler;
+//  Settings settings = new Settings();
+//
+//  ImageView r_bg[] = new ImageView[10];
+//  ImageView r_txt[] = new ImageView[10];
+//  ImageView s_bg[] = new ImageView[10];
+//  ImageView s_txt[] = new ImageView[10];
+//  ImageView color_set[][] = {s_bg, s_txt, r_bg, r_txt};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +91,50 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     menu_exit = findViewById(R.id.menu_exit);
 
     db_handler = DB_Handler.getInstance(this);
+//
+//    r_bg[0] = findViewById(R.id.color_receive_bg_1);
+//    r_bg[1] = findViewById(R.id.color_receive_bg_2);
+//    r_bg[2] = findViewById(R.id.color_receive_bg_3);
+//    r_bg[3] = findViewById(R.id.color_receive_bg_4);
+//    r_bg[4] = findViewById(R.id.color_receive_bg_5);
+//    r_bg[5] = findViewById(R.id.color_receive_bg_6);
+//    r_bg[6] = findViewById(R.id.color_receive_bg_7);
+//    r_bg[7] = findViewById(R.id.color_receive_bg_8);
+//    r_bg[8] = findViewById(R.id.color_receive_bg_9);
+//    r_bg[9] = findViewById(R.id.color_receive_bg_10);
+//
+//    r_txt[0] = findViewById(R.id.color_receive_txt_1);
+//    r_txt[1] = findViewById(R.id.color_receive_txt_2);
+//    r_txt[2] = findViewById(R.id.color_receive_txt_3);
+//    r_txt[3] = findViewById(R.id.color_receive_txt_4);
+//    r_txt[4] = findViewById(R.id.color_receive_txt_5);
+//    r_txt[5] = findViewById(R.id.color_receive_txt_6);
+//    r_txt[6] = findViewById(R.id.color_receive_txt_7);
+//    r_txt[7] = findViewById(R.id.color_receive_txt_8);
+//    r_txt[8] = findViewById(R.id.color_receive_txt_9);
+//    r_txt[9] = findViewById(R.id.color_receive_txt_10);
+//
+//    s_bg[0] = findViewById(R.id.color_send_bg_1);
+//    s_bg[1] = findViewById(R.id.color_send_bg_2);
+//    s_bg[2] = findViewById(R.id.color_send_bg_3);
+//    s_bg[3] = findViewById(R.id.color_send_bg_4);
+//    s_bg[4] = findViewById(R.id.color_send_bg_5);
+//    s_bg[5] = findViewById(R.id.color_send_bg_6);
+//    s_bg[6] = findViewById(R.id.color_send_bg_7);
+//    s_bg[7] = findViewById(R.id.color_send_bg_8);
+//    s_bg[8] = findViewById(R.id.color_send_bg_9);
+//    s_bg[9] = findViewById(R.id.color_send_bg_10);
+//
+//    s_txt[0] = findViewById(R.id.color_send_txt_1);
+//    s_txt[1] = findViewById(R.id.color_send_txt_2);
+//    s_txt[2] = findViewById(R.id.color_send_txt_3);
+//    s_txt[3] = findViewById(R.id.color_send_txt_4);
+//    s_txt[4] = findViewById(R.id.color_send_txt_5);
+//    s_txt[5] = findViewById(R.id.color_send_txt_6);
+//    s_txt[6] = findViewById(R.id.color_send_txt_7);
+//    s_txt[7] = findViewById(R.id.color_send_txt_8);
+//    s_txt[8] = findViewById(R.id.color_send_txt_9);
+//    s_txt[9] = findViewById(R.id.color_send_txt_10);
 
     findViewById(R.id.img_chatBackground).setAlpha(0.5f);
     setUpBot();
@@ -131,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     });
 
 
+//    MenuAdapter menuAdapter = new MenuAdapter(MainActivity.this, this, settings, color_set, this.menu, findViewById(R.id.color_menu));
     MenuAdapter menuAdapter = new MenuAdapter(MainActivity.this, this, this.menu);
     img_menu.setOnClickListener(menuAdapter);
     menu_setting.setOnClickListener(menuAdapter);
@@ -243,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
         flag = false;
 
-      } else if(action.equals("input.tel")){
+      } else if(action.equals("input.tel") || action.equals("input.장학금_종류")){
         Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(1).getQuickReplies();
         String str_lst[] = replies.getQuickRepliesList().toArray(new String[0]);
         for (int i = 0; i < str_lst.length;i++){

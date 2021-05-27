@@ -161,6 +161,16 @@
 <!--      </LinearLayout>-->
     </LinearLayout>
 
+      <include
+          layout="@layout/color_setting_menu"
+          android:layout_width="300dp"
+          android:layout_height="350dp"
+          android:id="@+id/color_menu"
+          android:layout_alignTop="@id/menu"
+          android:layout_alignRight="@id/menu"
+          android:visibility="gone"
+
+          />
   </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

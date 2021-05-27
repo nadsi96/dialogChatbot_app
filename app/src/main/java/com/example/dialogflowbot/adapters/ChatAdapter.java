@@ -214,12 +214,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       card_Text.setText(card_res.getText());
 
       ImageView card_Image = card.findViewById(R.id.img_card_img);
-      card_Image.setVisibility(View.GONE);
-      if (card_res.getImage() == null){
+
+      if (card_res.getImage() == -1){
         card_Image.setVisibility(View.GONE);
       }else{
-//        card_Image.;
-//        card_Image.setVisibility(View.VISIBLE);
+        switch(card_res.getImage()){
+          case 1:
+            card_Image.setImageResource(R.drawable.ptu_rotc);
+            break;
+          case 2:
+            card_Image.setImageResource(R.drawable.ptu_reserved);
+            break;
+          case 3:
+            card_Image.setImageResource(R.drawable.ptu_dormi);
+            break;
+          default:
+            break;
+        }
+        card_Image.setVisibility(View.VISIBLE);
       }
 
       Button card_Button = card.findViewById(R.id.btn_card_btn);
