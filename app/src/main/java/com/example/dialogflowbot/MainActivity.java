@@ -193,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
   private void setUpBot() {
     try {
-//      InputStream stream = this.getResources().openRawResource(R.raw.credential);
       InputStream stream = this.getResources().openRawResource(R.raw.credential);
       GoogleCredentials credentials = GoogleCredentials.fromStream(stream)
               .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
@@ -233,20 +232,12 @@ public class MainActivity extends AppCompatActivity implements BotReply {
 
       if(action.equals("input.test")){
         Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(1).getCard();
-//        Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(2).getQuickReplies();
-//        Log.i("111", replies.getQuickReplies(0));
-//        Log.i("2", replies.getQuickReplies(1));
         Log.i("card_Button_Count", card.getButtonsCount()+"");
         String title = card.getTitle();
         String text = card.getSubtitle();
         String image = card.getImageUri();
         String btnText = card.getButtons(0).getText();
         String btnUrl = card.getButtons(0).getPostback();
-        Log.i("card", btnText);
-        Log.i("card", btnUrl);
-        Log.i("card", title);
-        Log.i("card", text);
-        Log.i("card", image);
 
         messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
         chatAdapter.notifyDataSetChanged();
@@ -254,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
         flag = false;
 
-      }else if(action.equals("input.mil")){
+      }else if(action.equals("input.mil") || action.equals("input.기숙사") || action.equals("input.재입학")){
         Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
         String title = card.getTitle();
         String text = card.getSubtitle();
@@ -268,35 +259,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
         Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
         flag = false;
 
-      }else if(action.equals("input.기숙사")){
-        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
-        String title = card.getTitle();
-        String text = card.getSubtitle();
-        String image = card.getImageUri();
-        String btnText = card.getButtons(0).getText();
-        String btnUrl = card.getButtons(0).getPostback();
-
-        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
-        chatAdapter.notifyDataSetChanged();
-        db_handler.insert_Chat(messageList.get(messageList.size()-1));
-        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
-        flag = false;
-
-      }else if(action.equals("input.재입학")){
-        Intent.Message.Card card = returnResponse.getQueryResult().getFulfillmentMessages(0).getCard();
-        String title = card.getTitle();
-        String text = card.getSubtitle();
-        String image = card.getImageUri();
-        String btnText = card.getButtons(0).getText();
-        String btnUrl = card.getButtons(0).getPostback();
-
-        messageList.add(new Message(new Card_Response(title, text, image, btnText, btnUrl)));
-        chatAdapter.notifyDataSetChanged();
-        db_handler.insert_Chat(messageList.get(messageList.size()-1));
-        Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
-        flag = false;
-
-      } else if(action.equals("input.tel") || action.equals("input.장학금_종류")){
+      }else if(action.equals("input.tel") || action.equals("input.장학금_종류")){
         Intent.Message.QuickReplies replies = returnResponse.getQueryResult().getFulfillmentMessages(1).getQuickReplies();
         String str_lst[] = replies.getQuickRepliesList().toArray(new String[0]);
         for (int i = 0; i < str_lst.length;i++){

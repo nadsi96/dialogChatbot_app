@@ -11,7 +11,6 @@ import com.google.cloud.dialogflow.v2.SessionsClient;
 
 public class SendMessageInBg extends AsyncTask<Void, Void, DetectIntentResponse> {
 
-
   private SessionName session;
   private SessionsClient sessionsClient;
   private QueryInput queryInput;

@@ -7,4 +7,6 @@
     <dimen name="msgTimeTxtSize">14sp</dimen>
 
     <dimen name="colorIconSize">20dp</dimen>
+
+    <dimen name="cardMargin">10dp</dimen>
 </resources>
